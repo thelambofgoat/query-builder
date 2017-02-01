@@ -1,7 +1,7 @@
 <?php
     namespace App\Logic\Query;
 
-// Простой класс для построения SQL-запросов
+// Simple query builder for simple applications
 class QueryBuilder
 {
 
