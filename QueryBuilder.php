@@ -21,6 +21,13 @@ class QueryBuilder
 
     protected $limit;
 
+    protected $page;
+
+    protected $tokenShowAll = 'all';
+
+    // As not to hang browser or app on showing of thousands of items
+    protected $limitShowAll = 100;
+
     public function __construct($table)
     {
         $this->table = trim($table);
@@ -46,6 +53,7 @@ class QueryBuilder
         $this->orderBy = trim($orderByClause);
     }
 
+    // TODO: several GROUP BY conditions
     public function groupBy($groupByClause)
     {
         $this->groupBy = trim($groupByClause);
@@ -87,6 +95,23 @@ class QueryBuilder
             $query .= $this->limit;
         }
         return $query;
+    }
+
+    // TODO: design as trait
+    public function paginate($show = 20)
+    {
+        $p = $_GET['page'];
+        if ($p === $this->tokenShowAll) {
+            $this->limit = $this->limitShowAll;
+        } else {
+            // TODO: is this right?
+            $p = $p || 1;
+            $this->limit = $p <= $this->limitShowAll ? $p : $this->limitShowAll;
+            $this->offset = ($p - 1) * $this->limit;
+        }
+
+
+
     }
 
 }
